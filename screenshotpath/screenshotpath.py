@@ -4,15 +4,43 @@ import subprocess
 import os
 
 def main():
+    """
+    usage: screenshot_utility.py [-h] [--get] [--set NEW_LOCATION]
+
+    optional arguments:
+    -h, --help           show this help message and exit
+    --get                Retrieve the current screenshot location
+    --set NEW_LOCATION   Set a new screenshot location
+    """
+
     parser = argparse.ArgumentParser(description="Change macOS screenshot path.")
-    # Required:
-    requiredNamed = parser.add_argument_group('required named arguments')
-    requiredNamed.add_argument('location', 
-                               help="the absolute path to your screenshot location (will be prompted to create directory if path not found)")
+    parser.add_argument("--get", action="store_true", help="Retrieve the current screenshot location")
+    parser.add_argument('--set', help="Set a new screenshot location based on the absolute path provided.")
 
     args = parser.parse_args()
     # Runs the program
-    change_screenshot_location(args.location)
+    if args.get:
+        screenshot_location = get_screenshot_location()
+        if screenshot_location:
+            print("Current screenshots directory: ", screenshot_location)
+    elif args.set:
+        change_screenshot_location(args.location)
+    else:
+        print("No action specified. Use --get to retrieve the current screenshot location or --set to set a new location.")
+
+def get_screenshot_location():
+    try:
+        # Run the defaults command to get the screenshot location
+        result = subprocess.run(["defaults", "read", "com.apple.screencapture", "location"],
+                                capture_output=True, text=True, check=True)
+        
+        # Extract the path from the command output
+        location_path = result.stdout.strip()
+        
+        return location_path
+    except subprocess.CalledProcessError:
+        print("Error: Unable to retrieve screenshot location.")
+        return None
 
 def change_screenshot_location(new_path):
     # Check if the directory exists

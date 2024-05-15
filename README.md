@@ -1,7 +1,13 @@
 ### Screenshotpath
 
-Python package that changes your screenshot path on MacOS.
+Utility to get or set the screenshot location on macOS.
 
-### Usage
+### Usage:
+  `screenshotpath [--get | --set <PATH>]`
 
-`screenshotpath <PATH>`
+### Examples
+  1. Retrieve the current screenshot location:
+     `screenshotpath --get`
+
+  2. Set a new screenshot location to /absolute/path:
+     `screenshotpath --set /absolute/path`
