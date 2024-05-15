@@ -24,7 +24,7 @@ def main():
         if screenshot_location:
             print("Current screenshots directory: ", screenshot_location)
     elif args.set:
-        change_screenshot_location(args.location)
+        change_screenshot_location(args.set)
     else:
         print("No action specified. Use --get to retrieve the current screenshot location or --set to set a new location.")
 
